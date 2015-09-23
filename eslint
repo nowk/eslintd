@@ -1,0 +1,53 @@
+#!/bin/bash
+set -e
+
+# volume is the docker -v option
+volume=
+
+# opts are eslint options
+opts=
+
+# dir is the host volume directory
+dir=
+
+# files are the files arguments for eslint
+files=
+
+while [ "$#" -gt 0 ] ; do
+	case "$1" in
+		-*)
+			opts="$opts $1"
+		;;
+		*)
+			# this requires us to use /bin/bash
+			if [ "${1:0:1}" != "/" ] ; then
+				opts="$opts $1"
+				shift && continue
+			fi
+
+			# get the volume mount point, this will only done once, usually the
+			# first file
+			if [ ! -n "$dir" ] ; then
+				dir=$(dirname "$1")
+				volume="-v $dir:/opt/lint-src"
+			fi
+
+			files="$files /opt/lint-src/$(basename $1)"
+		;;
+	esac
+	shift
+done
+
+# if still no dir assignment, use `pwd` as volume mount point
+if [ ! -n "$dir" ] ; then
+	dir=$(pwd)
+	volume="-v $dir:/opt/lint-src"
+fi
+
+exec docker run \
+	$volume \
+	--rm eslint:v1.5.1 \
+	$opts \
+	$files | eslintd --host-path $dir --guest-path /opt/lint-src
+
+# vim: set filetype=sh :
