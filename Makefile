@@ -9,7 +9,7 @@ build-go:
 build-docker:
 	docker build --rm -t vim-eslintd:v1.5.1 .
 
-install:
+install: build-docker
 	sudo ln -s $(shell pwd)/eslint /usr/local/bin/eslint
 	sudo ln -s $(shell pwd)/vim-eslintd /usr/local/bin/vim-eslintd
 
