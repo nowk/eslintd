@@ -4,12 +4,12 @@ build-go:
 	 CGO_ENABLED=0 GOOS=linux go build \
 		-ldflags "-s" \
 		-a -installsuffix cgo \
-		-o eslintd $(shell pwd)/main.go
+		-o vim-eslintd $(shell pwd)/main.go
 
 build-docker:
-	docker build --rm -t eslint:v1.5.1 .
+	docker build --rm -t vim-eslintd:v1.5.1 .
 
 install:
 	sudo ln -s $(shell pwd)/eslint /usr/local/bin/eslint
-	sudo ln -s $(shell pwd)/eslintd /usr/local/bin/eslintd
+	sudo ln -s $(shell pwd)/vim-eslintd /usr/local/bin/vim-eslintd
 
