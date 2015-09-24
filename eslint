@@ -46,8 +46,8 @@ fi
 
 exec docker run \
 	$volume \
-	--rm vim-eslintd:v1.5.1 \
+	--rm eslintd:v1.5.1 \
 	$opts \
-	$files | vim-eslintd --host-path $dir --guest-path /opt/lint-src
+	$files | eslintd-tr --host-path $dir --guest-path /opt/lint-src
 
 # vim: set filetype=sh :
