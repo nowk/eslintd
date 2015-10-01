@@ -29,10 +29,10 @@ while [ "$#" -gt 0 ] ; do
 			# first file
 			if [ ! -n "$dir" ] ; then
 				dir=$(dirname "$1")
-				volume="-v $dir:/opt/lint-src"
+				volume="-v $dir:/src"
 			fi
 
-			files="$files /opt/lint-src/$(basename $1)"
+			files="$files /src/$(basename $1)"
 		;;
 	esac
 	shift
@@ -41,13 +41,13 @@ done
 # if still no dir assignment, use `pwd` as volume mount point
 if [ ! -n "$dir" ] ; then
 	dir=$(pwd)
-	volume="-v $dir:/opt/lint-src"
+	volume="-v $dir:/src"
 fi
 
 exec docker run \
 	$volume \
 	--rm eslintd:v1.5.1 \
 	$opts \
-	$files | eslintd-tr --host-path $dir --guest-path /opt/lint-src
+	$files | eslintd-tr --host-path $dir --guest-path /src
 
 # vim: set filetype=sh :
